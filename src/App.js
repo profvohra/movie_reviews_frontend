@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Routes, Route, NavLink } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import AddReview from "./components/addReview";
@@ -10,6 +10,9 @@ import Navbar from "react-bootstrap/Navbar";
 
 function App() {
   const [user, setUser] = useState(null);
+  const loginSetter = useCallback(user => {
+    setUser(user);
+  }, [setUser]);
 
   async function login(user = null) {
     setUser(user);
@@ -44,7 +47,7 @@ function App() {
           element={<AddReview user={user} />}
         ></Route>
 
-        <Route path="/login" element={<Login login={login} />}></Route>
+        <Route path="/login" element={<Login user={user} loginSetter={loginSetter} />}></Route>
       </Routes>
     </div>
   );
