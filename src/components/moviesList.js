@@ -15,17 +15,34 @@ const MoviesList = () => {
   const [ratings, setRatings] = useState(["All Ratings"]);
   const [currentPage, setCurrentPage] = useState(0)
   const [entriesPerPage, setEntriesPerPage] = useState(0)
+  const [currentSearchMode, setCurrentSearchMode] = useState("")
 
   useEffect(() => {
     retrieveMovies();
     retrieveRatings();
   }, []);
+
+  useEffect( () => {
+    setCurrentPage(0)
+  }, [currentSearchMode])
+  
   useEffect(() => {
-    retrieveMovies()
+    retrieveNextPage()
   }, [currentPage])
 
+  const retrieveNextPage = () => {
+    if(currentSearchMode === "findByTitle") {
+      findByTitle()
+    } else if(currentSearchMode === "findByRating") {
+      findByRating()
+    } else {
+      retrieveMovies()
+    }
+  }
+  
 
   const retrieveMovies = () => {
+    setCurrentSearchMode("")
     MovieDataService.getAll(currentPage)
       .then((response) => {
         console.log(response.data);
@@ -60,7 +77,7 @@ const MoviesList = () => {
   };
 
   const find = (query, by) => {
-    MovieDataService.find(query, by)
+    MovieDataService.find(query, by, currentPage)
       .then(response => {
         console.log(response.data)
         setMovies(response.data.movies)
@@ -72,11 +89,13 @@ const MoviesList = () => {
   const findByTitle =
     () => {
       setSearchRating("")
+      setCurrentSearchMode("findByTitle")
       find(searchTitle, "title")
     }
   const findByRating =
     () => {
       setSearchTitle("")
+      setCurrentSearchMode("findByRating")
       if (searchRating === "All Ratings") {
         retrieveMovies()
       } else {
