@@ -6,8 +6,9 @@ import Container from 'react-bootstrap/Container';
 import Image from 'react-bootstrap/Image';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import Button from 'react-bootstrap/Button';
 
-const Movie = (user) => {
+const Movie = (props) => {
 
   const [movie, setMovie] = useState({
     id: null,
@@ -45,12 +46,33 @@ const Movie = (user) => {
                 <Card.Text>
                   {movie.plot}
                 </Card.Text>
-                {user &&
+                {props.user &&
                   <Link to={"/movies/" + id + "/review"}>
                     Add Review
                   </Link>}
               </Card.Body>
             </Card>
+            <br></br>
+            <h2>Reviews</h2><br></br>
+            {movie.reviews.map((review, index) => {
+              return (
+                <Card key={index}>
+                  <Card.Body>
+                    <h5>{review.name + " reviewed on " + new Date(Date.parse(review.date)).toDateString()}</h5>
+                    <p>{review.review}</p>
+                    {props.user && props.user.id === review.user_id &&
+                      <Row>
+                        <Col><Link
+                          to={"/movies/" + id + "/review"}
+                          state={{ currentReview: review }}
+                        >Edit</Link>
+                        </Col>
+                        <Col><Button variant="link">Delete</Button></Col>
+                      </Row>}
+                  </Card.Body>
+                </Card>
+              )
+            })}
           </Col>
         </Row>
       </Container>
