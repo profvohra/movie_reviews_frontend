@@ -23,7 +23,7 @@ function Login({ loginSetter }) {
   const handleSubmit = () => {
     setUser({ name: name, id: id })
   }
-  
+
   return (
     <div>
       {user == null ? (
