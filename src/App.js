@@ -24,19 +24,30 @@ function App() {
     <div className="App">
       <Navbar bg="light" expand="lg">
         <Navbar.Brand>Movie Reviews</Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mr-auto">
-              <Nav.Link as={NavLink} to={"/movies"}>
-                Movies
-              </Nav.Link>
-              <Nav.Link as={NavLink} to={user ? "" : "/login"}>
-                {user ? "Logout User" : "Login"}
-              </Nav.Link>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="mr-auto">
+            <Nav.Link as={NavLink} to={"/movies"}>
+              Movies
+            </Nav.Link>
+            <Nav.Link as={NavLink} to={user ? "" : "/login"}>
+              {user ? "Logout User" : "Login"}
+            </Nav.Link>
 
-            </Nav>
-          </Navbar.Collapse>
+          </Nav>
+        </Navbar.Collapse>
       </Navbar>
+      <Routes>
+        <Route path="/" element={<MoviesList />}></Route>
+        <Route path="/movies" element={<MoviesList />}></Route>
+        <Route path="/movies/:id/" element={<Movie user={user} />}></Route>
+        <Route
+          path="/movies/:id/review"
+          element={<AddReview user={user} />}
+        ></Route>
+        <Route path="/login" element={<Login login={login} />}></Route>
+      </Routes>
+
     </div>
   );
 }
